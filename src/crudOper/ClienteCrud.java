@@ -106,11 +106,6 @@ public class ClienteCrud {
         this.connection = dbConnection.getDriverConnection(this.connection);
         this.statement = dbConnection.createStatement(this.statement, this.connection);
 
-        /*
-        String firstName = cliente.getFirstName();
-        String lastName = cliente.getLastName();
-        String phoneNumber = cliente.getPhoneNumber();
-        */
         String homeNumber = cliente.getHomeNumber();
 
         ResultSet resultSet;
@@ -122,9 +117,11 @@ public class ClienteCrud {
             resultSet = this.statement.executeQuery(searchQuery);
 
             while (resultSet.next()){
-                System.out.println(resultSet.getObject("firstName"));
-                //HOW TO LIST OTHER COLUMNS?
-                // "lastName" + "homeNumber" + "phoneNumber"
+                System.out.println(
+                        resultSet.getInt("idCliente") + " " +
+                                resultSet.getString("firstName") + " " +
+                                resultSet.getString("homeNumber") + " " +
+                                resultSet.getString("phoneNumber"));
             }
             statement.close();
             connection.close();
@@ -153,6 +150,32 @@ public class ClienteCrud {
             e.printStackTrace();
         }
         return idCliente;
+    }
+
+    public void updateHomeNumber(String oldHomeNumber, String newHomeNumber){
+
+        DBConnection dbConnection = new DBConnection();
+
+        this.connection = dbConnection.getDriverConnection(this.connection);
+        this.statement = dbConnection.createStatement(this.statement, this.connection);
+
+        int idCliente = getClientId(oldHomeNumber);
+
+        String queryChangeHomeNunmber = "UPDATE Cliente SET homeNumber = '"+ newHomeNumber +"' WHERE idCliente = " + idCliente + ";";
+
+        /**
+         * Trying to execute our query.
+         * Documentation is pretty much important.
+         */
+        try{
+//            statement.executeQuery(queryChangeHomeNunmber);
+//          executeQuery uses SELECT and return a ResultSet
+            statement.executeUpdate(queryChangeHomeNunmber);
+            statement.close();
+            connection.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
 }

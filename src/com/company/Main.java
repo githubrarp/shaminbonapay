@@ -20,7 +20,8 @@ public class Main {
 //        crud.insertarCliente(cliente);
 //        crud.updateCliente(cliente);
 //        crud.removeCliente(cliente);
-        crud.searchCliente(cliente);
+//        crud.searchCliente(cliente);
+        crud.updateHomeNumber("20D", "20B");
 
     }
 }
