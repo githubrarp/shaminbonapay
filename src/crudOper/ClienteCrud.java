@@ -17,7 +17,9 @@ public class ClienteCrud {
     }
 
     public boolean insertarCliente(Cliente cliente){
+
         DBConnection dbConnection = new DBConnection();
+
         this.connection = dbConnection.getDriverConnection(this.connection);
         this.statement = dbConnection.createStatement(this.statement, this.connection);
 
@@ -41,6 +43,7 @@ public class ClienteCrud {
     }
 
     public boolean updateCliente(Cliente cliente){
+
         DBConnection dbConnection = new DBConnection();
 
         this.connection = dbConnection.getDriverConnection(this.connection);
@@ -62,6 +65,8 @@ public class ClienteCrud {
             statement.executeUpdate(sqlUpdateClienteLastName);
             statement.executeUpdate(sqlUpdateClienteHomeNumber);
             statement.executeUpdate(sqlUpdateClientePhoneNumber);
+            statement.close();
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -70,12 +75,62 @@ public class ClienteCrud {
         return true;
     }
 
-    private boolean removeCliente(Cliente cliente){
+    public boolean removeCliente(Cliente cliente){
+
+        DBConnection dbConnection = new DBConnection();
+
+        this.connection = dbConnection.getDriverConnection(this.connection);
+        this.statement = dbConnection.createStatement(this.statement, this.connection);
+
+        String homeNumber = cliente.getHomeNumber();
+
+        int idCliente = getClientId(homeNumber);
+
+        String removeQuery = "DELETE FROM Cliente WHERE idCliente = " + idCliente + ";";
+
+        try {
+            statement.executeUpdate(removeQuery);
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         return true;
     }
 
-    private boolean queryCliente(Cliente cliente){
+    public boolean searchCliente(Cliente cliente){
+
+        DBConnection dbConnection = new DBConnection();
+
+        this.connection = dbConnection.getDriverConnection(this.connection);
+        this.statement = dbConnection.createStatement(this.statement, this.connection);
+
+        /*
+        String firstName = cliente.getFirstName();
+        String lastName = cliente.getLastName();
+        String phoneNumber = cliente.getPhoneNumber();
+        */
+        String homeNumber = cliente.getHomeNumber();
+
+        ResultSet resultSet;
+        int idCliente = getClientId(homeNumber);
+
+        String searchQuery = "SELECT * FROM Cliente WHERE idCliente = " + idCliente + ";";
+
+        try{
+            resultSet = this.statement.executeQuery(searchQuery);
+
+            while (resultSet.next()){
+                System.out.println(resultSet.getObject("firstName"));
+                //HOW TO LIST OTHER COLUMNS?
+                // "lastName" + "homeNumber" + "phoneNumber"
+            }
+            statement.close();
+            connection.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
 
         return true;
     }
@@ -92,7 +147,6 @@ public class ClienteCrud {
 
             while (resultSet.next()){
                 idCliente = resultSet.getInt("idCliente");
-                System.out.println("This is the loop of the resulset: " + idCliente);
             }
 
         } catch (SQLException e) {

@@ -14,11 +14,13 @@ public class Main {
         DBConnection DBWork = new DBConnection();
         DBWork.DBCreateTables();
 
-        Cliente cliente = new Cliente("Rik", "Rod", "9D");
+        Cliente cliente = new Cliente("Rik", "Rod", "20D");
         ClienteCrud crud = new ClienteCrud();
 
 //        crud.insertarCliente(cliente);
-        crud.updateCliente(cliente);
+//        crud.updateCliente(cliente);
+//        crud.removeCliente(cliente);
+        crud.searchCliente(cliente);
 
     }
 }
